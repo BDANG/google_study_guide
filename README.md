@@ -1,4 +1,6 @@
-# Quick Review
+(**Example code requires Python3**)
+# High Level Review
+
 
 ### Algorithms
 ### Sorting
@@ -30,22 +32,39 @@
         * `Double hashing` - search for the next available index via a second hash function
         * Drawback: significant degradation in performance when load factor exceeds 0.7. Resizing requires rehashing!
 ### Trees
-    * `Construction`
-    * `Traversal`
-        * `DFS` - use recursion to dive as deep as possible before checking same level
-            * `Inorder` - (left, root, right)
-            * `Postorder` - (left, right, root)
-            * `Preorder` - (root, left, right)
-        * `BFS` - use a FIFO queue to traverse same level before diving to next level
-    * `Manipulation`
-    * `Types`
-        * `Binary`
-        * `Binary Search`
-        * `n-ary`
-        * `Trie`
-        * `Red/black`
-        * `Splay`
-        * `AVL`
+* `Construction`
+    * WIP:
+    * `Sequential construction`
+        ```
+        init root
+        init current
+        init queue
+        for each element:
+            assign root if unassigned
+                assign current as root
+
+            assign current.left if unassigned
+                then push current.left
+
+            assign current.left if unassigned
+                then push current.right
+                current = queue.pop()
+        ```
+* `Traversal`
+    * `DFS` - use recursion to dive as deep as possible before checking same level
+        * `Inorder` - (left, root, right)
+        * `Postorder` - (left, right, root)
+        * `Preorder` - (root, left, right)
+    * `BFS` - use a FIFO queue to traverse same level before diving to next level
+* `Manipulation`
+* `Types`
+    * `Binary`
+    * `Binary Search`
+    * `n-ary`
+    * `Trie`
+    * `Red/black`
+    * `Splay`
+    * `AVL`
 ### Graphs
 ### Array
 ### LinkedList
