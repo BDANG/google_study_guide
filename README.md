@@ -123,12 +123,36 @@
             * Proportional to the degree of the node (# of neighbors)
 * `Dijkstra`
 * `Kruskal's MST`
+* `A*`
 ### Array
+* Fixed chunks of memory
+* Search sorted: O(logn) binary search
+* Insert O(n)
+* Append O(1)
+* Delete O(n) if shift
 ### LinkedList
 ### FIFO Queue
+```
+LinkedList data structure
+push(): append to end
+pop(): get first element, advance the head
+```
 ### LIFO Stack
+```
+doubly LinkedList data structure
+push(): append to end
+pop(): get last element, advance the head "backwards"
+```
 ### Priority Queues
+* Min or Max is the root node
+* children are greater than parent
+* `Runtimes`
+    * Get min/max: O(logn), need to maintain property
+    * Insert: O(logn)
+        * insert at leaf and push it upward
 ### Heaps
+* Array implementaiton of Priority Queue
+* Same performance, minus the tree overhead
 ### Famous NP-complete
 ### OS / Systems / Concurrency
 ### Recursion and Induction
