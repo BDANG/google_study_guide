@@ -53,9 +53,9 @@
         ```
 * `Traversal`
     * `DFS` - use recursion to dive as deep as possible before checking same level
-        * `Inorder` - (left, root, right)
-        * `Postorder` - (left, right, root)
-        * `Preorder` - (root, left, right)
+        * `Preorder` - (root, left, right) | report current node BEFORE both recursals
+        * `Inorder` - (left, root, right) | report current node in between both recursals
+        * `Postorder` - (left, right, root) | report current node AFTER both recursals
     * `BFS` - use a FIFO queue to traverse same level before diving to next level
 * `Manipulation`
 * `Types`
