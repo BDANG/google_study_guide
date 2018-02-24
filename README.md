@@ -36,17 +36,18 @@
     * WIP:
     * `Sequential construction`
         ```
-        init root
-        init current
-        init queue
+        init root as null
+        init current as null
+        init empty queue
         for each element:
             assign root if unassigned
                 assign current as root
 
             assign current.left if unassigned
                 then push current.left
+                continue to the next element
 
-            assign current.left if unassigned
+            assign current.right if unassigned
                 then push current.right
                 current = queue.pop()
         ```
