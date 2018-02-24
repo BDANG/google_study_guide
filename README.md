@@ -56,13 +56,30 @@
         * `Preorder` - (root, left, right) | report current node BEFORE both recursals
         * `Inorder` - (left, root, right) | report current node in between both recursals
         * `Postorder` - (left, right, root) | report current node AFTER both recursals
+        * `Runtime` - O(n), recursion overhed, no auxiliary
+            * O(n) - visit every node
     * `BFS` - use a FIFO queue to traverse same level before diving to next level
+        * `Runtime` - O(n), less overhead (no recursion), requires auxiliary queue
+            * O(n) - visit every node
+            * O(1) - each node you `push()` its two children
+            * O(1) - each iteration `pop()` the next node to visit
+    * `Usage: DFS vs BFS`
+        * Use `DFS` for binary search or a targetted O(logn) run time
+        * Use `DFS` for height/depth, leaf problems
+        * Use `BFS` for level problems
 * `Manipulation`
+    * `Insertion`
+    * `Deletion`
+    * `Search/Find`
+    * `Rebalancing`
 * `Types`
-    * `Binary`
-    * `Binary Search`
-    * `n-ary`
-    * `Trie`
+    * `Full` - each node has 0 or K children
+    * `Perfect` - full tree but every leaf at the same level
+    * `Complete` - every level filled, but the last level has children to the farthest left
+    * `Binary` - each node has [0, 1, 2] children, an n-ary tree where n=2
+    * `Binary Search` - values in each node is: 1) greater than or equal to all values in the left subtree and 2) less than to all values in the right subtree
+    * `n-ary` - each node has [0...n] children
+    * `Trie/digital/radix/prefix` - position within the tree defines the key. Keys are often strings
     * `Red/black`
     * `Splay`
     * `AVL`
