@@ -66,7 +66,7 @@
     * `Usage: DFS vs BFS`
         * Use `DFS` for binary search or a targetted O(logn) run time
         * Use `DFS` for height/depth, leaf problems
-        * Use `BFS` for level problems
+        * Use `BFS` for level problems, or checking equality between trees
 * `Manipulation`
     * `Insertion`
     * `Deletion`
@@ -84,6 +84,45 @@
     * `Splay`
     * `AVL`
 ### Graphs
+* `Representations`
+    * `Objects + Pointers`
+        ```
+        Vertex a = new Vertex(1);
+        Vertex b = new Vertex(2);
+        Edge edge = new Edge(a,b, 30);
+        ```
+        * Good for: small graphs, flexibility
+        * Bad: requires more explicit maintenace of edges in a datastructure
+    * `Matrix`
+        ```
+        N nodes --> N x N Matrix
+
+        values in matrix are non-zero (1 or weighted) to indicate linkage
+
+        specify directionality with row node -> column node
+        ```
+        * Good for: dense graphs where nodes are heavily connected, need to check O(1) edge existence
+        * Bad: often wasted space, redundant data for undirected graphs, if nodes cannot be self-directed O(n) wasted data guaranteed
+        * "Find node's neighbors"
+            * O(1) get node
+            * O(n) guaranteed search row/column
+    * `Adjacency List`
+        ```
+        N nodes --> size(N) list
+        each index is associated with a LinkedList of neighbors
+
+        specify directionality with list[index] -> neighbors
+
+        weighting is maintained in LinkedList i.e. (neighbor, weight) or via a separate LinkedList
+        ```
+        * Good for: sparse graphs where nodes are not heavily connected
+        * Bad: LinkedList node and link overhead, more searching to update undirected links (need to update 2 indices), O(degree) to check edge existence
+        * "Find node's neighbors"
+            * O(1) get node
+            * O(n) *worst case* search LinkedList, sparse graphs are not much of an issue.
+            * Proportional to the degree of the node (# of neighbors)
+* `Dijkstra`
+* `Kruskal's MST`
 ### Array
 ### LinkedList
 ### FIFO Queue
