@@ -124,6 +124,18 @@
 * `Dijkstra`
 * `Kruskal's MST`
 * `A*`
+* `Union Find`
+    ```
+    find(u): return's the leading parent
+    union(u, v): assign the parent of u to be the parent of v
+
+    for each edge specified as (u, v):
+        if find(u) == find(v):
+            # causes cycle
+        else:
+            union(u, v)
+    ```
+    * Determines if an edge causes a cycle
 ### Array
 * Fixed chunks of memory
 * Search sorted: O(logn) binary search
@@ -131,19 +143,29 @@
 * Append O(1)
 * Delete O(n) if shift
 ### LinkedList
+* Nodes store value and reference to the next node
+* Search: O(n), no binary search
+* Insert O(1) with reference to previous
+* Append O(1)
+* Delete O(1) with reference to previous
 ### FIFO Queue
 ```
 LinkedList data structure
 push(): append to end
 pop(): get first element, advance the head
 ```
+* Push(): O(1)
+* Pop(): O(1)
 ### LIFO Stack
 ```
 doubly LinkedList data structure
 push(): append to end
 pop(): get last element, advance the head "backwards"
 ```
+* Push(): O(1)
+* Pop(): O(1)
 ### Priority Queues
+* A semi-ordered binary tree
 * Min or Max is the root node
 * children are greater than parent
 * `Runtimes`
@@ -153,9 +175,18 @@ pop(): get last element, advance the head "backwards"
 ### Heaps
 * Array implementaiton of Priority Queue
 * Same performance, minus the tree overhead
+*
 ### Famous NP-complete
+* `Traveling salesman`
+* `Knapsack problem`
+*
 ### OS / Systems / Concurrency
 ### Recursion and Induction
 ### Discrete Math
+* `Set theory`
+    * `union` - all elements between two sets
+    * `intersection` - all elements existing in both sets
+    * `difference` - elements in existing in the former set but not the latter
+    * `subset` - all elements of a subset exist in the superset
 ### System Design
 ### Development Practices
