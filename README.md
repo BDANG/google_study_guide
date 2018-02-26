@@ -1,10 +1,10 @@
 # Review Guide for Google's Technical Phone Interview
 #### by Brian Dang
-#
+###
 
 
 (**Example code requires Python3**)
-## High Level Review
+###
 
 
 ### Algorithms
@@ -22,19 +22,26 @@
     * NOT STABLE
 ### Hashtables
 * `Overview`
-    * A symbol table (key-value) for O(1) put, O(1) get, O(1) delete
-    * `index <-- hash(key)`
-    * `put(key, value): table[index]=value`
-    * `get(key): return table[index]`
-    * `delete(key): table[index] = None`
+    * A symbol table (key-value)
+    * `put(key, value)`: O(1)
+    * `get(key)`: O(1)
+    * `delete(key)`: O(1)
+    * `resize()`: O(K) -- each key needs to be put() again
+        ```
+        index = hash(key)
+        put(key, value): table[index]=value
+        get(key): return table[index]
+        delete(key): table[index] = None
+        ```
     * `load factor`: a decimal (percentage) of table occupancy (0.8 is 80% filled table)
 * `Collisions` - when two *different* keys hash to the same index, how to retrieve the right value?
     * `Separate chaining` - index of table points to a list-like that stores (key, value) tuples
         * upon collision, iterate the chain
         * worst case: O(n) iteration of a chain
+        * resizes less often since chains can be arbitrarily long but avoiding resizes causes more degradation to O(n)
     * `Open addressing` - locate another index (probing) to place the key without creating a separate chaining
-        * `Linear probing` - iterate until you find the next available index
-        * `Quadratic probing` - search for the next available index via a quadratic polynomial
+        * `Linear probing` - increment linearly (often +1) until you find the next available index
+        * `Quadratic probing` - search for the next available index via a quadratic polynomial, avoids clustering (where clustering increases collisions for new keys)
             ```
             index = hash(key)
             probe = 0
@@ -42,11 +49,18 @@
             B = constant
 
             until non occupied index:
-                searchIndex = index + probe^2*A + probe*B
+                searchIndex = (index + probe^2*A + probe*B) mod size
                 probe++
             ```
 
-        * `Double hashing` - search for the next available index via a second hash function
+        * `Double hashing` - search for the next available index via a second hash function, avoids repeated collisions that occurs in linear/quadratic
+            ```
+            index = hash1(key)
+            iterator = 0
+            until non occupied index:
+                searchIndex = (index + iterator*hash2(key)) mod size
+                iterator++
+            ```
         * Drawback: significant degradation in performance when load factor exceeds 0.7. Resizing requires rehashing!
 ### Trees
 * `Construction`
@@ -215,6 +229,8 @@ pop(): get last element, advance the head "backwards"
 ### OS / Systems / Concurrency
 ### Recursion and Induction
 * `Recursion`
+* `Backtrack`
+* `Induction`
 ### Discrete Math
 * `Set theory`
     * `union` - all elements between two sets
