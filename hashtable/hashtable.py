@@ -43,6 +43,11 @@ class Hashtable:
         encoded = key.encode()
         return int(hashlib.sha1(encoded).hexdigest(), 16) % self.size
 
+    def _hash2(self, key):
+        #encoded = key.encode()
+        return (hash(key) % self.size)+1
+        #return int(hashlib.blake2b(encoded).hexdigest(), 16) % self.size
+
 
     def _chain_put(self, key, value):
         index = self._hash1(key)
@@ -91,10 +96,21 @@ class Hashtable:
             probe+=1
             searchIndex = self._quadratic_probe(index, probe)
 
+    def _double_hash(self, key, probe):
+        return (self._hash1(key) + probe*(self._hash2(key)) + probe) % self.size
 
 
+    # wip strange
+    def _double_put(self, key, value):
+        probe = 0
+        while True:
+            searchIndex = self._double_hash(key, probe)
+            print("attempting "+str(probe)+" "+str(searchIndex))
 
-
+            if not self.table[searchIndex]:
+                self.table[searchIndex] = (key, value)
+                break
+            probe += 1
 
     def put(self, key, value=None):
         self.keys.add(key)
@@ -104,10 +120,7 @@ class Hashtable:
             # wip: handle resizing when hashtable is full
             self._linear_put(key, value)
         elif self.mode == "quadratic":
-            #successful = False
-            #while not successful:
-            successful = self._quadratic_put(key, value)
-            #self.resize()
+            self._quadratic_put(key, value)
         elif self.mode == "double":
             self._double_put(key, value)
 
@@ -142,9 +155,13 @@ class Hashtable:
             probe+=1
             searchIndex = self._quadratic_probe(index, probe)
 
-
-
-
+    def _double_get(self, key):
+        probe = 0
+        while True:
+            searchIndex = self._double_hash(key, probe)
+            if self.table[searchIndex] and self.table[searchIndex][0] == key:
+                return self.table[searchIndex][1]
+            probe += 1
 
     def get(self, key):
         if key not in self.keys:
@@ -205,6 +222,14 @@ class Hashtable:
             probe += 1
             searchIndex = self._quadratic_probe(index, probe)
 
+    def _double_delete(self, key):
+        probe = 0
+        while True:
+            searchIndex = self._double_hash(key, probe)
+            if self.table[searchIndex] and self.table[searchIndex][0] == key:
+                self.table[searchIndex] = None
+                return
+            probe+=1
 
     def delete(self, key):
         if key not in self.keys:
@@ -273,7 +298,6 @@ def test_linear_hashtable(testset):
     table.put("Harrison", testset["Harrison"])
     test_table_contents(table, testset)
 
-
 def test_quadratic_hashtable(testset):
     print("\n---TESTING QUADRATIC PROBE HASHTABLE---")
     table = Hashtable(mode="quadratic", size=len(testset.keys()))
@@ -297,12 +321,37 @@ def test_quadratic_hashtable(testset):
     table.put("thomas", testset["thomas"])
     test_table_contents(table, testset)
 
+def test_double_hashtable(testset):
+    print("\n---TESTING DOUBLE HASH HASHTABLE---")
+    table = Hashtable(mode="double", size=len(testset.keys())*2)
+    #print(table.size)
+
+    # put key-values into hashtable
+    load_hashtable(table, testset)
+
+    # check the key-values in hashtable
+    print("\nChecking Double Hash get():")
+    test_table_contents(table, testset)
+
+    # delete "thomas"
+    print("\nDeleting thomas-"+str(testset["thomas"])+": ")
+    table.delete("thomas")
+    test_table_contents(table, testset)
+
+
+    # resize hashtable
+    print("\nResizing and Re-adding thomas-"+str(testset["thomas"])+": ")
+    table.resize()
+    table.put("thomas", testset["thomas"])
+    test_table_contents(table, testset)
+
 if __name__ == "__main__":
     testset = {"brian": "dang",
-                  "thomas": "kang",
-                  "Harrison": "d",
-                  "sam": "hughes",
-                  "Brian": "Caps"}
+               "thomas": "kang",
+               "Harrison": "d",
+               "sam": "hughes",
+               "Brian": "Caps"}
     test_chain_hashtable(testset)
     test_linear_hashtable(testset)
     test_quadratic_hashtable(testset)
+    test_double_hashtable(testset)
