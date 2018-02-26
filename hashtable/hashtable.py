@@ -44,9 +44,16 @@ class Hashtable:
         return int(hashlib.sha1(encoded).hexdigest(), 16) % self.size
 
     def _hash2(self, key):
-        #encoded = key.encode()
-        return (hash(key) % self.size)+1
-        #return int(hashlib.blake2b(encoded).hexdigest(), 16) % self.size
+        h = (hash(key) % self.size) + 1
+
+        # if the second hash equals the self.size then the
+        # double hash will always return the same
+        if h == self.size:
+            h += 1
+        return h
+
+        #return (hash(key) % self.size)+1
+
 
 
     def _chain_put(self, key, value):
@@ -97,7 +104,9 @@ class Hashtable:
             searchIndex = self._quadratic_probe(index, probe)
 
     def _double_hash(self, key, probe):
-        return (self._hash1(key) + probe*(self._hash2(key)) + probe) % self.size
+        #print(self._hash1(key))
+        #print(probe, self._hash2(key), probe*self._hash2(key))
+        return ((self._hash1(key) + probe*(self._hash2(key)))+1) % self.size
 
 
     # wip strange
@@ -105,7 +114,7 @@ class Hashtable:
         probe = 0
         while True:
             searchIndex = self._double_hash(key, probe)
-            print("attempting "+str(probe)+" "+str(searchIndex))
+            #print("attempting "+str(probe)+" "+str(searchIndex))
 
             if not self.table[searchIndex]:
                 self.table[searchIndex] = (key, value)
