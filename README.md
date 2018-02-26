@@ -1,5 +1,10 @@
+# Review Guide for Google's Technical Phone Interview
+#### by Brian Dang
+#
+
+
 (**Example code requires Python3**)
-# High Level Review
+## High Level Review
 
 
 ### Algorithms
@@ -17,10 +22,11 @@
     * NOT STABLE
 ### Hashtables
 * `Overview`
-    * A symbol table (key-value) for O(1) put, O(1) get
+    * A symbol table (key-value) for O(1) put, O(1) get, O(1) delete
     * `index <-- hash(key)`
     * `put(key, value): table[index]=value`
     * `get(key): return table[index]`
+    * `delete(key): table[index] = None`
     * `load factor`: a decimal (percentage) of table occupancy (0.8 is 80% filled table)
 * `Collisions` - when two *different* keys hash to the same index, how to retrieve the right value?
     * `Separate chaining` - index of table points to a list-like that stores (key, value) tuples
@@ -29,6 +35,17 @@
     * `Open addressing` - locate another index (probing) to place the key without creating a separate chaining
         * `Linear probing` - iterate until you find the next available index
         * `Quadratic probing` - search for the next available index via a quadratic polynomial
+            ```
+            index = hash(key)
+            probe = 0
+            A = constant (!=0)
+            B = constant
+
+            until non occupied index:
+                searchIndex = index + probe^2*A + probe*B
+                probe++
+            ```
+
         * `Double hashing` - search for the next available index via a second hash function
         * Drawback: significant degradation in performance when load factor exceeds 0.7. Resizing requires rehashing!
 ### Trees
