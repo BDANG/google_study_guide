@@ -5,6 +5,7 @@ class LLNode:
         self.value = value
         self.next = None
 class Hashtable:
+
     def __init__(self, mode, size=25):
         '''
         mode - a string in the set {"chain", "linear", "quadratic", "double"}
@@ -14,6 +15,11 @@ class Hashtable:
             self.size = size
             self.table = [None for i in range(size)]
             self.keys = set()
+
+            # constants for quadratic
+            if mode == "quadratic":
+                self.quadratic_a = 3
+                self.quadratic_b = 2
         else:
             return None
 
@@ -69,6 +75,26 @@ class Hashtable:
                     break
                 searchindex = (searchindex + 1) % self.size
 
+    def _quadratic_probe(self, index, probe):
+        return (index + (probe**2)*(self.quadratic_a) + probe*(self.quadratic_b)) % self.size
+
+    def _quadratic_put(self, key, value):
+        index = self._hash1(key)
+        probe = 0
+
+        # search = original_hash + (probe^2)*A + probe*B
+        searchIndex = self._quadratic_probe(index, probe)
+        while True:
+            if not self.table[searchIndex]:
+                self.table[searchIndex] = (key, value)
+                break
+            probe+=1
+            searchIndex = self._quadratic_probe(index, probe)
+
+
+
+
+
 
     def put(self, key, value=None):
         self.keys.add(key)
@@ -78,7 +104,10 @@ class Hashtable:
             # wip: handle resizing when hashtable is full
             self._linear_put(key, value)
         elif self.mode == "quadratic":
-            self._quadratic_put(key, value)
+            #successful = False
+            #while not successful:
+            successful = self._quadratic_put(key, value)
+            #self.resize()
         elif self.mode == "double":
             self._double_put(key, value)
 
@@ -100,6 +129,19 @@ class Hashtable:
             searchIndex = (searchIndex+1) % self.size
             if searchIndex == index:
                 break
+
+    def _quadratic_get(self, key):
+        index = self._hash1(key)
+        probe = 0
+
+        # search = original_hash + (probe^2)*A + probe*B
+        searchIndex = self._quadratic_probe(index, probe)
+        while True:
+            if self.table[searchIndex] and self.table[searchIndex][0] == key:
+                return self.table[searchIndex][1]
+            probe+=1
+            searchIndex = self._quadratic_probe(index, probe)
+
 
 
 
@@ -151,6 +193,18 @@ class Hashtable:
             searchIndex = (searchIndex+1) % self.size
             if searchIndex == index:
                 break
+
+    def _quadratic_delete(self, key):
+        index = self._hash1(key)
+        probe = 0
+        searchIndex = self._quadratic_probe(index, probe)
+        while True:
+            if self.table[searchIndex] and self.table[searchIndex][0] == key:
+                self.table[searchIndex] = None
+                return
+            probe += 1
+            searchIndex = self._quadratic_probe(index, probe)
+
 
     def delete(self, key):
         if key not in self.keys:
@@ -205,8 +259,8 @@ def test_linear_hashtable(testset):
     # put key-values into hashtable
     load_hashtable(table, testset)
 
-    print("\nChecking Linear get():")
     # check the key-values in hashtable
+    print("\nChecking Linear get():")
     test_table_contents(table, testset)
 
     # delete Harrison-d
@@ -219,6 +273,30 @@ def test_linear_hashtable(testset):
     table.put("Harrison", testset["Harrison"])
     test_table_contents(table, testset)
 
+
+def test_quadratic_hashtable(testset):
+    print("\n---TESTING QUADRATIC PROBE HASHTABLE---")
+    table = Hashtable(mode="quadratic", size=len(testset.keys()))
+
+    # put key-values into hashtable
+    load_hashtable(table, testset)
+
+    # check the key-values in hashtable
+    print("\nChecking Quadratic get():")
+    test_table_contents(table, testset)
+
+    # delete "thomas"
+    print("\nDeleting thomas-"+str(testset["thomas"])+": ")
+    table.delete("thomas")
+    test_table_contents(table, testset)
+
+
+    # resize hashtable
+    print("\nResizing and Re-adding thomas-"+str(testset["thomas"])+": ")
+    table.resize()
+    table.put("thomas", testset["thomas"])
+    test_table_contents(table, testset)
+
 if __name__ == "__main__":
     testset = {"brian": "dang",
                   "thomas": "kang",
@@ -227,3 +305,4 @@ if __name__ == "__main__":
                   "Brian": "Caps"}
     test_chain_hashtable(testset)
     test_linear_hashtable(testset)
+    test_quadratic_hashtable(testset)
