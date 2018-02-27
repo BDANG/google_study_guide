@@ -177,21 +177,21 @@
 * Nodes store value and reference to the next node
 * Search: O(n), no binary search
 * Insert O(1) with reference to previous
-* Append O(1)
+* Append O(1) with reference to the end
 * Delete O(1) with reference to previous
 ### FIFO Queue
 ```
 LinkedList data structure
 push(): append to end
-pop(): get first element, advance the head
+pop(): get head value, head = head.next
 ```
 * Push(): O(1)
 * Pop(): O(1)
 ### LIFO Stack
 ```
 doubly LinkedList data structure
-push(): append to end
-pop(): get last element, advance the head "backwards"
+push(): init new_head, new_head.next = old_head
+pop(): get head value, head = head.next
 ```
 * Push(): O(1)
 * Pop(): O(1)
@@ -254,18 +254,83 @@ pop(): get last element, advance the head "backwards"
 * `Dominating set` - "a subset vertices such that every vertex not in the set is adjacent to at least one member of the set. The domination number γ(G) is the number of vertices in a smallest dominating set for G"
 * `Graph coloring` - "is a way of coloring the vertices of a graph such that no two adjacent vertices share the same color; this is called a vertex coloring. Similarly, an edge coloring assigns a color to each edge so that no two adjacent edges share the same color, and a face coloring of a planar graph assigns a color to each face or region so that no two faces that share a boundary have the same color"
 ### OS / Systems / Concurrency
-* `Processes`
-* 
-* `Threads`
-* `Concurrency`
-    * `Issues`
-    * `Modern concurrency constructs (cores)`
-* `Locks`
-* `Mutexes`
-* `Semaphores`
-* `Monitors`
-* `Context switching`
-* `Scheduling`
+* `Processes` - an instance of a computer program being actively executed, code and current state (memory)
+* `Threads` - a lightweight process, exist as a component of a `process`, executed concurrently with shared memory and address space, maintain less state information because it is handled by parent `process`, context switching between `threads` is faster than `processes`
+* `Concurrency` - computations from different threads are interleaved instead of executed sequentially
+    * `Issues` - need to ensure the correct sequencing of the interactions or communications between different computational executions, and coordinating access to resources that are shared among executions. debugging can be difficult as concurrent execution is nondeterministic
+        * `race condition` - output is dependent on the order of execution, arises from interleaving critcal sections that require mutual exclusion
+            * avoidance: locking critical sections such that only one thread has access to it for the entire execution of the section
+        * `deadlock` - a state where each member of a group is waiting for some other member to complete an action. no active execution
+            * avoidance (pick one:):
+                * remove *mutual exclusion* but impossible if resource cannot be spooled. spooled resources can still cause deadlock. non-blocking synchronization
+                * remove hold and wait by requiring processes to request all the resources they will need before starting up (or before embarking upon a particular set of operations). This advance knowledge is frequently difficult to satisfy and, in any case, is an inefficient use of resources. Or require processes to request resources only when it has none. Thus, first they must release all their currently held resources before requesting all resources it needs. This too is often impractical. Resources may be allocated and remain unused for long periods. Also, a process requiring a popular resource may have to wait indefinitely
+                * allow premption, difficult or impossible because a process might need a resource for a long time
+                * avoid circular waits include disabling interrupts during critical sections and using a hierarchy to determine a partial ordering of resources
+            * detection: observe the state (no progress); each process has locked and/or currently requested are known to the resource scheduler of the operating system
+            * resolution: abort 1 process (but lose partial computations), resource preemption
+        * `livelock` - "similar to a deadlock, except that the states of the processes involved in the livelock constantly change with regard to one another, none progressing" like the hallway jiggle
+            * a risk with some algorithms that detect and recover from deadlock. If more than one process takes action, the deadlock detection algorithm can be repeatedly triggered
+            * avoidance: ensuring that only one process (chosen arbitrarily or by priority) takes action
+        * `resource starvation` - a process is perpetually denied necessary resources to process its work
+            * caused by an overly simplistic scheduling algorithm. For example, if a (poorly designed) multi-tasking system always switches between the first two tasks while a third never gets to run, then the third task is being starved of CPU time
+            * avoidance: ensure a scheduler allows equal sharing of CPU time, ensure equal access to resources?
+    * `Modern concurrency constructs (cores)` - a single computing component with two or more independent processing units called cores, which read and execute program instructions.[1] The instructions are ordinary CPU instructions (such as add, move data, and branch) but the single processor can run multiple instructions on separate cores at the same time, increasing overall speed for programs amenable to parallel computing
+        * implements multiprocessing in a single physical package
+        * gained by the use of a multi-core processor depends very much on the software algorithms used and their implementation. In particular, possible gains are limited by the fraction of the software that can run in parallel simultaneously on multiple cores
+* `Locks` - allows only one thread to access a locked code (critical region), not shared with other processes, also a binary semaphore
+* `Mutexes` - same as a lock, but shared across processes
+* `Semaphore` - like a lock, but can allow multiple threads to access the locked code
+* `Monitors` - synchronization construct that allows threads to have both mutual exclusion and the ability to wait (block) for a certain condition to become true
+    * have a mechanism for signaling other threads that their condition has been met
+    * A monitor consists of a mutex (lock) object and condition variables. A condition variable is basically a container of threads that are waiting for a certain condition. Monitors provide a mechanism for threads to temporarily give up exclusive access in order to wait for some condition to be met, before regaining exclusive access and resuming their task
+    * Another definition of monitor is a thread-safe class, object, or module that uses wrapped mutual exclusion in order to safely allow access to a method or variable by more than one thread.
+* `Context switching` - storing the state of a process or of a thread, so that it can be restored and execution resumed from the same point later. This allows multiple processes to share a single CPU, and is an essential feature of a multitasking operating system
+    * context switch can also occur as the result of an interrupt, such as when a task needs to access disk storage, freeing up CPU time for other tasks. Some operating systems also require a context switch to move between user mode and kernel mode tasks
+    * usually computationally intensive, and much of the design of operating systems is to optimize the use of context switches
+    * saving and loading registers and memory maps, updating various tables and lists
+    * context switching threads is often quicker as less saving/loading data
+* `Scheduling` - method by which work specified by some means is assigned to resources that complete the work. The work may be virtual computation elements such as threads, processes or data flows, which are in turn scheduled onto hardware resources such as processors, network links or expansion cards
+    * The main purposes of scheduling algorithms are to minimize resource starvation and to ensure fairness amongst the parties utilizing the resources
+    * Does one of the following: maximizing throughput (amount of work per time unit), minimizing wait time, minimizing latency, maximizing fairness
+    * preemptive scheduler: decides which process to run, when to stop, and which is next
+    * `long term scheduling` - decides which jobs or processes are to be admitted to the ready queue (in main memory); when an attempt is made to execute a program;
+        * dictates what processes are to run on a system, and the degree of concurrency to be supported at any one time
+        * Long-term scheduling is also important in large-scale systems such as batch processing systems, computer clusters, supercomputers, and render farms
+    * `medium term scheduling` - removes processes from main memory and places them in secondary memory or vice versa, which is commonly referred to as "swapping out" or "swapping in"
+        * decide to swap out a process which has not been active for some time, or a process which has a low priority, or a process which is page faulting frequently, or a process which is taking up a large amount of memory in order to free up main memory for other processes, swapping the process back in later when more memory is available, or when the process has been unblocked and is no longer waiting for a resource
+    * `short term scheduling` - decides which of the ready, in-memory processes is to be executed (allocated a CPU) after a clock interrupt, an I/O interrupt, an operating system call or another form of signal
+        * makes scheduling decisions much more frequently than the long-term or mid-term schedulers – a scheduling decision will at a minimum have to be made after every time slice, and these are very short
+        * can be preemptive, implying that it is capable of forcibly removing processes from a CPU when it decides to allocate that CPU to another process, or non-preemptive (also known as "voluntary" or "co-operative"), in which case the scheduler is unable to "force" processes off the CPU
+    * `FIFO` - simply queues processes in the order that they arrive in the ready queue
+        * scheduling overhead minimal with respect to context switches
+        * throughput can be low if long processes queued before short processes
+        * no starvation, each process gets executed
+        * turnaround time, waiting time, and response time can be long if long processes queued before short processes
+        * no prioritization -- likely misses deadlines
+    * `Earliest Deadline First` - queue will be searched for the process closest to its deadline, which will be the next to be scheduled for execution
+    * `Shortest remaining time first` - arranges processes with the least estimated processing time remaining to be next in the queue. This requires advanced knowledge or estimations about the time required for a process to complete
+        * If a shorter process arrives during another process' execution, the currently running process is interrupted (known as preemption), dividing that process into two separate computing blocks. This creates excess overhead through additional context switching. The scheduler must also place each incoming process into a specific place in the queue, creating additional overhead
+        * This algorithm is designed for maximum throughput in most scenarios
+        * Waiting time and response time increase as the process's computational requirements increase. Since turnaround time is based on waiting time plus processing time, longer processes are significantly affected by this. Overall waiting time is smaller than FIFO, however since no process has to wait for the termination of the longest process
+        * No particular attention is given to deadlines, the programmer can only attempt to make processes with deadlines as short as possible
+        * Starvation is possible, especially in a busy system with many small processes being run
+        * should have at least two processes of different priority
+    * `Shortest job first?`
+    * `Fixed priority preemptive` - fixed priority rank to every process, and the scheduler arranges the processes in the ready queue in order of their priority. Lower-priority processes get interrupted by incoming higher-priority processes
+        * Overhead is not minimal, nor is it significant
+        * FPPS has no particular advantage in terms of throughput over FIFO scheduling
+        * If the number of rankings is limited, it can be characterized as a collection of FIFO queues, one for each priority ranking. Processes in lower-priority queues are selected only when all of the higher-priority queues are empty
+        * Waiting time and response time depend on the priority of the process. Higher-priority processes have smaller waiting and response times
+        * Deadlines can be met by giving processes with deadlines a higher priority
+        * Starvation of lower-priority processes is possible with large numbers of high-priority processes queuing for CPU time
+    * `Round Robin` - The scheduler assigns a fixed time unit per process, and cycles through them. If process completes within that time-slice it gets terminated otherwise it is rescheduled after giving a chance to all other processes
+        * involves extensive overhead, especially with a small time unit
+        * Balanced throughput between FCFS/ FIFO and SJF/SRTF, shorter jobs are completed faster than in FIFO and longer processes are completed faster than in SJF
+        * Good average response time, waiting time is dependent on number of processes, and not average process length
+        * Because of high waiting times, deadlines are rarely met in a pure RR system
+        * Starvation can never occur, since no priority is given. Order of time unit allocation is based upon process arrival time, similar to FIFO
+        * If Time-Slice is large It becomes FCFS /FIFO or If it is short then it becomes SJF/SRTF
+    * `Multilevel queue` - for situations in which processes are easily divided into different groups. For example, a common division is made between foreground (interactive) processes and background (batch) processes. These two types of processes have different response-time requirements and so may have different scheduling needs
 ### Recursion and Induction
 * `Recursion`
 * `Backtrack`
