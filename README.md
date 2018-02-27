@@ -53,7 +53,7 @@
                 probe++
             ```
 
-        * `Double hashing` - search for the next available index via a second hash function, avoids repeated collisions that occurs in linear/quadratic
+        * `Double hashing` - search for the next available index via a second hash function, avoids repeated collisions that occurs in linear/quadratic. second hash function != size
             ```
             index = hash1(key)
             iterator = 0
@@ -196,17 +196,44 @@ pop(): get last element, advance the head "backwards"
 * Push(): O(1)
 * Pop(): O(1)
 ### Priority Queues
+* More of an abstract datatype:
+    * Get min/max, peek(): O(1)
+    * Remove min/max pop(): O(logn), maintain property
+    * Insert: O(logn), insert at leaf and push upward
 * A semi-ordered binary tree
 * Min or Max is the root node
-* children are greater than parent
-* `Runtimes`
-    * Get min/max: O(logn), need to maintain property
-    * Insert: O(logn)
-        * insert at leaf and push it upward
+    * Min PQ: children are greater than or equal to parent
+    * Max PQ: children are less than or equal to parent
+* Pushing up, swimming
+    ```
+    current = last index
+    while current has parent and parent value > current value:
+        swap(parentIndex, currentIndex)
+        current = parent(current)
+    ```
+* Pushing down, sinking
+    ```
+    current = 0
+    while current has left:
+        smallerChildIndex = leftchildIndex(current)
+        if current has right and rightchild(current) < leftchild(current):
+            smallerChildIndex = rightchildIndex(current)
+
+        if item[current] < item[smallerChildIndex]:
+            break
+        else:
+            swap(current, smallerChildIndex)
+        current = smallerChildIndex
+    ```
 ### Heaps
 * Array implementaiton of Priority Queue
 * Same performance, minus the tree overhead
-*
+* Relations
+    ```
+    parent(i) = array[floor of (i-1)/2]
+    left_child(i) = array[2*i + 1]
+    right_child(i) = array[2*i + 2]
+    ```
 ### Famous NP-complete
 * `NP-complete` a subset of `NP-hard` problems that are *solved in polynomial time nondeterministically* but verifiable in polynomial time
 * a problem is `NP-complete` if every other problem in NP can be transformed/reduced into the problem in polynomial time
@@ -227,6 +254,18 @@ pop(): get last element, advance the head "backwards"
 * `Dominating set` - "a subset vertices such that every vertex not in the set is adjacent to at least one member of the set. The domination number γ(G) is the number of vertices in a smallest dominating set for G"
 * `Graph coloring` - "is a way of coloring the vertices of a graph such that no two adjacent vertices share the same color; this is called a vertex coloring. Similarly, an edge coloring assigns a color to each edge so that no two adjacent edges share the same color, and a face coloring of a planar graph assigns a color to each face or region so that no two faces that share a boundary have the same color"
 ### OS / Systems / Concurrency
+* `Processes`
+* 
+* `Threads`
+* `Concurrency`
+    * `Issues`
+    * `Modern concurrency constructs (cores)`
+* `Locks`
+* `Mutexes`
+* `Semaphores`
+* `Monitors`
+* `Context switching`
+* `Scheduling`
 ### Recursion and Induction
 * `Recursion`
 * `Backtrack`
