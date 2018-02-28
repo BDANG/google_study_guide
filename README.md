@@ -65,7 +65,7 @@
 ### Trees
 * `Construction`
     * WIP:
-    * `Sequential construction`
+    * `Sequential Construction`
         ```
         init root as null
         init current as null
@@ -81,6 +81,38 @@
             assign current.right if unassigned
                 then push current.right
                 current = queue.pop()
+        ```
+    * `Generic Binary Search Tree Construction`
+        ```
+        init a root with the first value
+        for every remaining value:
+            bst_insert(root, value)
+
+        bst_insert(root, value):
+            base cases (root.left/root.right is None for the correct branch)
+
+            if value <= root.value:
+                bst_insert(root.left, value)
+            else:
+                bst_insert(root.right, value)
+        ```
+    * `Preorder Binary Search Tree Construction`
+        ```
+        def recurse(numbers, parent):
+            if numbers is empty:
+                return parent
+
+            rootvalue = numbers.pop(0)
+
+            find index with element greater than root value
+
+            parent = Node(rootvalue)
+            parent.left = recurse(numbers[:rightIndex], parent)
+            parent.right = recurse(numbers[rightIndex:], parent)
+
+            return parent
+            
+        root = recurse(numbers, None)
         ```
 * `Traversal`
     * `DFS` - use recursion to dive as deep as possible before checking same level
