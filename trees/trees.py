@@ -13,7 +13,8 @@ class BinaryTree:
             self.root = self.build_generic_tree(valueList)
         elif valueList and mode == "generic_bst":
             self.root = self.build_generic_bst(valueList)
-        #elif valueList and mode == "preorder_bst"
+        elif valueList and mode == "preorder":
+            self.root = self.build_preorder_bst(valueList)
         else:
             self.root = None
 
@@ -61,3 +62,37 @@ class BinaryTree:
             self.generic_bst_insert(root.left, val)
         else:
             self.generic_bst_insert(root.right, val)
+
+    def build_preorder_bst(self, valueList):
+
+        def recurse(nums, parent):
+            if len(nums) == 0:
+                return None
+
+            rootval = nums.pop(0)
+            #if parent == None:
+            #    parent = BinaryTreeNode(rootval)
+
+            rightSubTreeIndex = -1
+            for i in range(len(nums)):
+                if rootval < nums[i]:
+                    rightSubTreeIndex = i
+                    break
+
+            '''if parent:
+                print(rootval, nums, parent.value)
+            else:
+                print(rootval, nums, None)'''
+
+            parent = BinaryTreeNode(rootval)
+
+            parent.left = recurse(nums[:rightSubTreeIndex], parent)
+
+            parent.right = recurse(nums[rightSubTreeIndex:], parent)
+
+
+            return parent
+
+
+        root = recurse(valueList, None)
+        return root
