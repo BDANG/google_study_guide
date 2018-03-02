@@ -8,6 +8,11 @@
 
 
 ### Algorithms
+* `Dynamic Programming` - technique which is usually based on a recurrent formula and one (or some) starting states. A sub-solution of the problem is constructed from previously found ones. DP solutions have a polynomial complexity which assures a much faster running time than other techniques like backtracking, brute-force etc
+    *  find a state for which an optimal solution is found and with the help of which we can find the optimal solution for the next state
+    * recurrent relation, which makes a connection between a lower and a greater state
+    * define a "state" which represents a sub-problem and thus we have to find a solution for it
+    * in most cases the states rely on lower states and are independent from greater states
 ### Sorting
 * `Mergesort`
     * Divide and conquer, recursively divide until 1-element array
@@ -111,7 +116,7 @@
             parent.right = recurse(numbers[rightIndex:], parent)
 
             return parent
-            
+
         root = recurse(numbers, None)
         ```
 * `Traversal`
@@ -185,6 +190,41 @@
             * O(n) *worst case* search LinkedList, sparse graphs are not much of an issue.
             * Proportional to the degree of the node (# of neighbors)
 * `Dijkstra`
+    ```
+    init empty heap
+    init parent array with None's for each vertex
+    parent[start] = -1
+    init empty visited set
+
+    init vertex = source vertex
+    init currentWeight = 0
+
+    init found = False
+
+    while size of visited not equal to number of vertices:
+        if vertex == sink/target vertex:
+            found = True
+            break
+
+        if vertex not visited:
+            mark vertex visited
+            for each neighbor, weight:
+                if parent[neighbor] == None:
+                    parent[neighbor] = vertex
+                heap.push((currentWeight, neighbor))
+
+        if heap not empty:
+            (currentWeight, vertex) = heap.pop()
+        else:
+            break
+
+    if found:
+        parse the parent array for path
+        return path, currentWeight
+    else:
+        return None, -1
+
+    ```
 * `Kruskal's MST`
 * `A*`
 * `Union Find`
