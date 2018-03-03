@@ -21,6 +21,28 @@
     * `Space`: O(n) auxiliary
     * Stable sort
 * `Quicksort`
+    ```
+    partition(list, left, right, pivot)
+        while left less than or equal to right
+            increment left till misplaced value
+            decrement right till misplaced value
+
+            if left value less than or equal to right value
+                swap(left value, right value)
+                increment left
+                decrement right
+
+        return left
+
+    sort(list, left, right)
+        if left greater or equal to right
+            return
+
+        select pivot value
+        i = partition(list, left, right, pivot)
+        sort(list, left, i-1)
+        sort(list, i, right)
+    ```
     * Select a pivot and sort elements to the right or left of the pivot
     * `Runtime`: O(n^2) worst case, O(nlogn) average
     * `Space`: O(1) in place or O(n) auxiliary
