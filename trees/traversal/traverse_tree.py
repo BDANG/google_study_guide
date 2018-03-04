@@ -20,11 +20,17 @@ if __name__ == "__main__":
     print("DFS Postorder: "+str(DFS.postorder(bst.root, [])))
 
     print("\n---Generic Random BST---")
-    randbst = BinaryTree(valueList=[4,7,2,1,2,8,3], mode="generic_bst")
+    randbst = BinaryTree(valueList=[10,5,4,6,40,25,50], mode="generic_bst")
     print("BFS: "+str(BFS.bfs(randbst.root, []))+"\n")
     print("DFS Preorder: "+str(DFS.preorder(randbst.root, [])))
     print("DFS Inorder: "+str(DFS.inorder(randbst.root, [])))
     print("DFS Postorder: "+str(DFS.postorder(randbst.root, [])))
+
+    search = 50
+    print("Search "+str(search)+" "+str(randbst.search(search)))
+    delete = 5
+    print("Delete "+str(delete)+" "+str(randbst.delete(delete)))
+    print("BFS: "+str(BFS.bfs(randbst.root, []))+"\n")
 
     print("\n---Preorder BST---")
     preorderbst = BinaryTree(valueList=[10,5,4,6,40,25,50], mode="preorder")

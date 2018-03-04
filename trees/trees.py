@@ -18,6 +18,60 @@ class BinaryTree:
         else:
             self.root = None
 
+    def search(self, value):
+        return self._search(value, self.root)
+
+    def _search(self, value, root):
+        if not root:
+            return False
+
+        if root.value == value:
+            return True
+
+        if value < root.value:
+            return self._search(value, root.left)
+        else:
+            return self._search(value, root.right)
+
+    def min_node(self, root):
+        current = root
+        while current.left:
+            current = current.left
+        return current
+
+
+    def delete(self, value):
+        self._delete(value, self.root)
+
+    def _delete(self, value, root):
+        if not root:
+            return root
+
+        if value < root.value:
+            root.left = self._delete(value, root.left)
+        elif value > root.value:
+            root.right = self._delete(value, root.right)
+        else:
+            if not root.left:
+                rightchild = root.right
+                root = None
+                return rightchild
+            elif not root.right:
+                leftchild = root.left
+                root = None
+                return leftchild
+
+            new = self.min_node(root.right)
+            root.value = new.value
+            root.right = self._delete(new.value, root.right)
+
+        return root
+
+
+
+
+
+
     # WIP: watch for empty valueList?
     def build_generic_tree(self, valueList):
         rootNode = None

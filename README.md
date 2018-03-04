@@ -168,11 +168,16 @@
     * `Complete` - every level filled, but the last level has children to the farthest left
     * `Binary` - each node has [0, 1, 2] children, an n-ary tree where n=2
     * `Binary Search` - values in each node is: 1) greater than or equal to all values in the left subtree and 2) less than to all values in the right subtree
+        * `insertion, search` - O(h) where h is height. logn <= h <= n
+        * `deletion`
+            * leaf deletion - simply remove it
+            * has 1 child - move the child up to the deleted nodes
+            * has 2 children - go to right child and repeatedly go left and take the leftmost (in the right subtree) to replace the deleted node
     * `n-ary` - each node has [0...n] children
     * `Trie/digital/radix/prefix` - position within the tree defines the key. Keys are often strings
     * `Red/black`
     * `Splay`
-    * `AVL`
+    * `AVL` - more balanced than red/black but require more rotations when insertion/deletion
 ### Graphs
 * `Representations`
     * `Objects + Pointers`
@@ -193,6 +198,7 @@
         ```
         * Good for: dense graphs where nodes are heavily connected, need to check O(1) edge existence
         * Bad: often wasted space, redundant data for undirected graphs, if nodes cannot be self-directed O(n) wasted data guaranteed
+        * Triangle matrix for undirected graphs: index (row, col) as row <= col
         * "Find node's neighbors"
             * O(1) get node
             * O(n) guaranteed search row/column
