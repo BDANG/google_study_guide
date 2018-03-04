@@ -433,7 +433,19 @@ pop(): get head value, head = head.next
     * `Multilevel queue` - for situations in which processes are easily divided into different groups. For example, a common division is made between foreground (interactive) processes and background (batch) processes. These two types of processes have different response-time requirements and so may have different scheduling needs
 ### Recursion and Induction
 * `Recursion`
-* `Backtrack`
+* `Backtrack (think DFS)`
+    ```
+    bt(partial):
+        definite wrong solution:
+            return
+        full solution:
+            record solution
+            return
+
+        for every next option:
+            if option is appropriate:
+                bt(partial + option)
+    ```
 * `Induction`
 ### Discrete Math
 * `Set theory`
