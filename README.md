@@ -176,8 +176,21 @@
     * `n-ary` - each node has [0...n] children
     * `Trie/digital/radix/prefix` - position within the tree defines the key. Keys are often strings
     * `Red/black`
+        * 4 Properties
+            * every node red or black
+            * root (and null) always black
+            * red node must have black children
+            * every path from root to null has equal black nodes (not including the root color!)
+        * 4 cases
+        * Rotations are O(1) BUT rotations might propagate upwards logn times
+        * height always logn
     * `Splay`
     * `AVL` - more balanced than red/black but require more rotations when insertion/deletion
+        * "for each node, the height of left and and right subtrees must be less than or equal to 2"
+        * cases (based on root): LL, LR, RR, RL
+            * LR and RL cause a rotation such that grandchild swaps with child (respective to root)
+            * LL and RR cause a rotation on the root. LL causes right rotation and RR causes left rotation
+        * height always logn
 ### Graphs
 * `Representations`
     * `Objects + Pointers`
